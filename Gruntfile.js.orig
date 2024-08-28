@@ -23,10 +23,6 @@
 		grunt.loadNpmTasks( "grunt-jscs" );
 		grunt.loadNpmTasks( "grunt-blanket-mocha" );
 
-    // <JRJ> Added these from V2.2.0.3
-		grunt.loadNpmTasks( "grunt-contrib-uglify" );
-		grunt.loadNpmTasks( "grunt-contrib-cssmin" );
-
 		var bumpVersion = function( version ) {
 				var join = ".",
 					level = grunt.option( "level" ) || 2;
@@ -215,29 +211,9 @@
 				}
 			},
 
-      // <JRJ> Added these from V2.2.0.3
-			uglify: {
-				buildFW: {
-					files: {
-						"www/js/app.js": [ "www/js/jquery.js", "www/js/main.js", "www/js/libs.js" ]
-					}
-				}
-			},
-
-      // <JRJ> Added these from V2.2.0.3
-			cssmin: {
-				combine: {
-					files: {
-						"www/css/app.css": [ "www/css/jqm.css", "www/css/main.css" ]
-					}
-				}
-			},
-
-      // <JRJ> Added makeFW from V2.2.0.3
 			clean: {
 				pushFW: [ "build/firmware/*", "build/app.zip" ],
-				symres: [ "www/res" ],
-        makeFW: [ "www/js/app.js", "www/css/app.css" ]
+				symres: [ "www/res" ]
 			}
 		} );
 
@@ -250,11 +226,4 @@
 		grunt.registerTask( "pushBetaFW", [ "compress:makeFW", "shell:updateBetaUI", "clean:pushFW" ] );
 		grunt.registerTask( "build", [ "default", "shell:symres", "pushFW", "clean:symres" ] );
 		grunt.registerTask( "bump", [ "default", "replace:about", "replace:cordova", "replace:manifests", "shell:pushBump" ] );
-
-    // <JRJ> Added these from V2.2.0.3
-		grunt.registerTask( "buildFW", [ "default", "uglify", "cssmin" ] );
-		grunt.registerTask( "makeFW", [ "buildFW", "compress:makeFW", "clean:makeFW" ] );
-
-    // <JRJ> Support Apache WEB Site without app.js / app.css
-    grunt.registerTask( "makeFWApache", [ "default", "compress:makeFW", "clean:makeFW" ] );
 	};
